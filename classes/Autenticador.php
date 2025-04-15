@@ -4,7 +4,7 @@ class Autenticador {
     private array $usuarios = [];
 
     public function __construct() {
-        $this->registrar(new Usuario("Natani Gayardo", "joaonatiigabriella@email.com", "azul"));
+        $this->registrar(new Usuario("Natani Gayardo", "natiigabriella@email.com", "azul"));
         $this->registrar(new Usuario("Dorival Junior", "dorijunior@email.com", "tecnico"));
     }
 
