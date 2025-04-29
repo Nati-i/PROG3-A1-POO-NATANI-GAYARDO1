@@ -1,25 +1,28 @@
 <?php
-
-/**
- * Classe para gerenciamento da sessão do usuário.
- */
 class Sessao {
-
     public static function iniciar(): void {
-        if (session_status() == PHP_SESSION_NONE) {
+        if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
     }
 
-    public static function set(string $chave, mixed $valor): void {
+    public static function set(string $chave, $valor): void {
+        self::iniciar();
         $_SESSION[$chave] = $valor;
     }
 
-    public static function get(string $chave): mixed {
+    public static function get(string $chave) {
+        self::iniciar();
         return $_SESSION[$chave] ?? null;
     }
 
     public static function destruir(): void {
+        self::iniciar();
+        session_unset();
         session_destroy();
     }
 }
+
+
+
+?>
