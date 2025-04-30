@@ -1,21 +1,35 @@
 <?php
 
+require_once 'Usuario.php';
+
 class Autenticador {
-    private array $usuarios = [];
-
-    public function __construct() {
-        $this->registrar(new Usuario("Natani Gayardo", "natiigabriella@email.com", "azul"));
-        $this->registrar(new Usuario("Dorival Junior", "dorijunior@email.com", "tecnico"));
+    public static function registrar(Usuario $usuario): bool {
+        self::iniciar();
+        foreach ($_SESSION['usuarios'] ?? [] as $u) {
+            if ($u->getEmail() === $usuario->getEmail()) {
+                return false;
+            }
+        }
+        $_SESSION['usuarios'][] = $usuario;
+        return true;
     }
 
-    public function registrar(Usuario $usuario): void {
-        $this->usuarios[$usuario->getEmail()] = $usuario;
-    }
-
-    public function login(string $email, string $senha): ?Usuario {
-        if (isset($this->usuarios[$email]) && $this->usuarios[$email]->verificarSenha($senha)) {
-            return $this->usuarios[$email];
+    public static function login(string $email, string $senha): ?Usuario {
+        self::iniciar();
+        foreach ($_SESSION['usuarios'] ?? [] as $usuario) {
+            if ($usuario->getEmail() === $email && $usuario->autenticar($senha)) {
+                return $usuario;
+            }
         }
         return null;
     }
+
+    private static function iniciar(): void {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+    }
 }
+
+
+?>
